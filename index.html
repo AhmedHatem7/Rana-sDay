@@ -8,8 +8,28 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--bg:#03010D;--bg2:#080318;--bg3:#0f0525;--rose:#D4507A;--rose2:#E8829F;--rose3:#F2BAC9;--rose-dk:#9B2B52;--gold:#C9963A;--gold2:#E8C17A;--gold3:#FDF0D5;--purple:#7C3AED;--purple2:#A78BFA;--cream:#FDF6F0;--ink:#1A0E12;--ink2:#4A2535;}
-html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--bg);color:#fff;font-family:'Cairo',sans-serif;overflow-x:hidden}
+html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+}
+
+body {
+    background: var(--bg);
+    color: #fff;
+    /* ضفنا الخطوط الاحتياطية عشان لو كاييرو محملش الموبايل ميرجعش لخط السيستم القديم */
+    font-family: 'Cairo', sans-serif !important; 
+    overflow-x: hidden;
+    /* السطرين دول بيخلوا الخط العربي أنعم بكتير على شاشات الموبايل */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* لازم نأكد على العناصر اللي فيها نصوص مباشرة */
+#dlg-txt, .dlg-role, .dlg-txt {
+    font-family: 'Cairo', sans-serif !important;
+    line-height: 1.6; /* بيخلي الكلام مريح للعين في الشاشات الصغيرة */
+    direction: rtl;   /* عشان يظبط علامات الترقيم في آخر الجملة */
+}
 #stars-cv{position:fixed;inset:0;z-index:0;pointer-events:none}
 .screen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.2s ease,visibility 1.2s ease;padding:20px}
 .screen.gone{opacity:0;visibility:hidden;pointer-events:none}
