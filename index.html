@@ -105,6 +105,12 @@ body {
     overflow-wrap: break-word;
     display: block;
     min-height: 1.8em;
+    display: flex; /* تحويل الحاوية لـ flex */
+    flex-direction: row-reverse; /* لضمان الترتيب الصحيح من اليمين للشمال */
+    justify-content: flex-start;
+    white-space: nowrap; 
+    font-variant-ligatures: common-ligatures;
+    text-rendering: optimizeLegibility;
 }
 .dlg-cur{display:inline-block;width:2px;height:1em;background:var(--rose);vertical-align:middle;animation:blink .7s step-end infinite;margin-right:2px}
 @keyframes blink{50%{opacity:0}}
