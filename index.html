@@ -96,19 +96,16 @@ body {
 .dlg-role{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.28)}
 .dlg-txt {
     font-family: 'Cairo', sans-serif !important;
-    font-size: clamp(15px, 2.8vw, 18px); /* تكبير الخط قليلاً للموبايل */
+    font-size: clamp(15px, 2.8vw, 18px);
     color: rgba(255, 255, 255, 0.95);
-    line-height: 1.8 !important; /* مسافة كافية للنقط والهمزات */
+    line-height: 2;
     text-align: right;
     direction: rtl;
-    word-wrap: break-word; /* كسر السطر عند الكلمات كاملة */
+    word-wrap: break-word;
     overflow-wrap: break-word;
     display: block;
     min-height: 1.8em;
-    display: flex; /* تحويل الحاوية لـ flex */
-    flex-direction: row-reverse; /* لضمان الترتيب الصحيح من اليمين للشمال */
-    justify-content: flex-start;
-    white-space: nowrap; 
+    white-space: normal;
     font-variant-ligatures: common-ligatures;
     text-rendering: optimizeLegibility;
 }
@@ -308,9 +305,9 @@ footer{background:var(--bg);border-top:1px solid rgba(212,80,122,.09);padding:52
 </div>
 
 <!-- Dialog بدون زرار — تلقائي -->
-<div id="dlg" dir="rtl">
-  <div class="dlg-inner" dir="rtl">
-    <div class="dlg-who" id="dlg-who" dir="rtl"></div>
+<div id="dlg" >
+  <div class="dlg-inner" >
+    <div class="dlg-who" id="dlg-who" ></div>
     <div class="dlg-txt" id="dlg-txt" dir="rtl"></div>
   </div>
 </div>
