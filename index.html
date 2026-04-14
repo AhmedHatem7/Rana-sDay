@@ -6,8 +6,15 @@
 <title>Rana Refaat — 24</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cairo:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@1,300;1,400;1,600&family=Dancing+Script:wght@600;700&display=swap" rel="stylesheet">
 <style>
-*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
-:root{--bg:#03010D;--bg2:#080318;--bg3:#0f0525;--rose:#D4507A;--rose2:#E8829F;--rose3:#F2BAC9;--rose-dk:#9B2B52;--gold:#C9963A;--gold2:#E8C17A;--gold3:#FDF0D5;--purple:#7C3AED;--purple2:#A78BFA;--cream:#FDF6F0;--ink:#1A0E12;--ink2:#4A2535;}
+*{
+    margin:0;
+    padding:0; 
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+:root{
+    --bg:#03010D;--bg2:#080318;--bg3:#0f0525;--rose:#D4507A;--rose2:#E8829F;--rose3:#F2BAC9;--rose-dk:#9B2B52;--gold:#C9963A;--gold2:#E8C17A;--gold3:#FDF0D5;--purple:#7C3AED;--purple2:#A78BFA;--cream:#FDF6F0;--ink:#1A0E12;--ink2:#4A2535;
+}
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
@@ -16,19 +23,26 @@ html {
 body {
     background: var(--bg);
     color: #fff;
-    /* ضفنا الخطوط الاحتياطية عشان لو كاييرو محملش الموبايل ميرجعش لخط السيستم القديم */
-    font-family: 'Cairo', sans-serif !important; 
+    /* الترتيب هنا مهم جداً للموبايل */
+    font-family: 'Cairo', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif !important;
     overflow-x: hidden;
-    /* السطرين دول بيخلوا الخط العربي أنعم بكتير على شاشات الموبايل */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    direction: rtl; /* اتجاه الصفحة العام لليمن */
 }
 
 /* لازم نأكد على العناصر اللي فيها نصوص مباشرة */
-#dlg-txt, .dlg-role, .dlg-txt {
+#dlg-txt, .dlg-txt, #lbody, .mstxt {
     font-family: 'Cairo', sans-serif !important;
-    line-height: 1.6; /* بيخلي الكلام مريح للعين في الشاشات الصغيرة */
-    direction: rtl;   /* عشان يظبط علامات الترقيم في آخر الجملة */
+    line-height: 1.8 !important; /* مسافة بين السطور مريحة */
+    text-align: right; /* محاذاة لليمين */
+    word-spacing: 1px;
+}
+.dlg-role {
+    font-family: 'Cairo', sans-serif !important;
+    font-weight: 600;
+    letter-spacing: 0px !important; /* الحروف العربية مش بتحتاج مسافات بينها */
 }
 #stars-cv{position:fixed;inset:0;z-index:0;pointer-events:none}
 .screen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.2s ease,visibility 1.2s ease;padding:20px}
@@ -70,7 +84,12 @@ body {
 /* ===== DIALOG — بدون زرار، تلقائي ===== */
 #dlg{position:fixed;bottom:0;left:0;right:0;z-index:2000;pointer-events:none;transition:transform .5s cubic-bezier(.34,1.2,.64,1),opacity .5s ease;transform:translateY(100%);opacity:0}
 #dlg.show{transform:translateY(0);opacity:1;pointer-events:all}
-.dlg-inner{background:rgba(3,1,13,.93);backdrop-filter:blur(24px);border-top:1px solid rgba(212,80,122,.22);padding:18px 20px 24px;max-width:680px;margin:0 auto;position:relative}
+.dlg-inner {
+    background: rgba(3,1,13,.95);
+    backdrop-filter: blur(20px);
+    padding: 20px;
+    border-radius: 15px 15px 0 0; /* شكل ألطف للموبايل */
+}
 .dlg-inner::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--rose),transparent)}
 .dlg-who{display:flex;align-items:center;gap:9px;margin-bottom:9px}
 .dlg-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:1px solid;overflow:hidden}
@@ -78,7 +97,7 @@ body {
 .dlg-av svg{width:100%;height:100%;border-radius:50%}
 .av-boy{border-color:rgba(133,183,235,.4);background:rgba(30,80,130,.2)}
 .av-girl{border-color:rgba(212,80,122,.4);background:rgba(180,40,80,.15)}
-.dlg-role{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.28)}
+
 .dlg-txt{font-family:'Cairo',sans-serif;font-size:clamp(14px,2.4vw,16px);color:rgba(255,255,255,.85);line-height:2.2;min-height:36px;margin-bottom:4px}
 .dlg-cur{display:inline-block;width:2px;height:1em;background:var(--rose);vertical-align:middle;animation:blink .7s step-end infinite;margin-right:2px}
 @keyframes blink{50%{opacity:0}}
