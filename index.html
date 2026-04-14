@@ -9,13 +9,39 @@
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{--bg:#03010D;--bg2:#080318;--bg3:#0f0525;--rose:#D4507A;--rose2:#E8829F;--rose3:#F2BAC9;--rose-dk:#9B2B52;--gold:#C9963A;--gold2:#E8C17A;--gold3:#FDF0D5;--purple:#7C3AED;--purple2:#A78BFA;--cream:#FDF6F0;--ink:#1A0E12;--ink2:#4A2535;}
 html{scroll-behavior:smooth;overflow-x:hidden}
-body{background:var(--bg);color:#fff;font-family:'Cairo',sans-serif;overflow-x:hidden}
+body {
+    background: var(--bg);
+    color: #fff;
+    font-family: 'Cairo', sans-serif !important;
+    overflow-x: hidden;
+    direction: rtl; /* إجباري لضبط اتجاه الكلمات وعلامات الترقيم */
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    /* بيمنع المتصفح إنه يغير حجم الخط بمزاجه لما تمسك الموبايل بالعرض */
+    -webkit-text-size-adjust: 100%; 
+}
 #stars-cv{position:fixed;inset:0;z-index:0;pointer-events:none}
 .screen{position:fixed;inset:0;z-index:1000;display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity 1.2s ease,visibility 1.2s ease;padding:20px}
 .screen.gone{opacity:0;visibility:hidden;pointer-events:none}
 #s-age{background:radial-gradient(ellipse at 50% 40%,#1a0826 0%,#03010D 75%)}
 .ast{position:absolute;border-radius:50%;background:#fff;animation:tw ease-in-out infinite}
 @keyframes tw{0%,100%{opacity:.1}50%{opacity:1}}
+#dlg-txt, .lwrap, .mstxt, .tf-txt {
+    unicode-bidi: isolate;
+    white-space: normal;
+    /* بيخلي المتصفح ميعملش اختصارات غريبة للكلمات */
+    font-variant-ligatures: no-common-ligatures; 
+}
+
+/* للموبايل تحديداً */
+@media (max-width: 640px) {
+    .dlg-inner {
+        padding: 18px 18px 25px; /* موازنة المساحة في الشاشات الصغيرة */
+    }
+    .dlg-txt {
+        letter-spacing: 0; /* الحروف العربية لا تحب الـ spacing */
+    }
+}
 .age-top{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,2vw,15px);color:rgba(255,255,255,.3);letter-spacing:5px;margin-bottom:16px;text-align:center;z-index:1}
 .age-name{font-family:'Dancing Script',cursive;font-size:clamp(36px,8vw,68px);background:linear-gradient(135deg,#fff 10%,var(--rose3) 50%,var(--gold2) 90%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:6px;text-align:center;z-index:1}
 .age-since{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.8vw,15px);color:rgba(255,255,255,.3);letter-spacing:3px;margin-bottom:36px;text-align:center;z-index:1}
@@ -50,7 +76,16 @@ body{background:var(--bg);color:#fff;font-family:'Cairo',sans-serif;overflow-x:h
 /* ===== DIALOG — بدون زرار، تلقائي ===== */
 #dlg{position:fixed;bottom:0;left:0;right:0;z-index:2000;pointer-events:none;transition:transform .5s cubic-bezier(.34,1.2,.64,1),opacity .5s ease;transform:translateY(100%);opacity:0}
 #dlg.show{transform:translateY(0);opacity:1;pointer-events:all}
-.dlg-inner{background:rgba(3,1,13,.93);backdrop-filter:blur(24px);border-top:1px solid rgba(212,80,122,.22);padding:18px 20px 24px;max-width:680px;margin:0 auto;position:relative}
+.dlg-inner {
+    background: rgba(3, 1, 13, 0.96); /* تعتيم أعلى قليلاً */
+    backdrop-filter: blur(24px);
+    border-top: 1px solid rgba(212, 80, 122, 0.22);
+    padding: 20px 25px 30px; /* زيادة المساحة الجانبية */
+    max-width: 680px;
+    margin: 0 auto;
+    position: relative;
+    overflow: visible; /* عشان الحروف اللي طالعة لبره متتقصش */
+}
 .dlg-inner::before{content:'';position:absolute;top:0;left:15%;right:15%;height:1px;background:linear-gradient(90deg,transparent,var(--rose),transparent)}
 .dlg-who{display:flex;align-items:center;gap:9px;margin-bottom:9px}
 .dlg-av{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;border:1px solid;overflow:hidden}
@@ -59,7 +94,18 @@ body{background:var(--bg);color:#fff;font-family:'Cairo',sans-serif;overflow-x:h
 .av-boy{border-color:rgba(133,183,235,.4);background:rgba(30,80,130,.2)}
 .av-girl{border-color:rgba(212,80,122,.4);background:rgba(180,40,80,.15)}
 .dlg-role{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.28)}
-.dlg-txt{font-family:'Cairo',sans-serif;font-size:clamp(14px,2.4vw,16px);color:rgba(255,255,255,.85);line-height:2.2;min-height:36px;margin-bottom:4px}
+.dlg-txt {
+    font-family: 'Cairo', sans-serif !important;
+    font-size: clamp(15px, 2.8vw, 18px); /* تكبير الخط قليلاً للموبايل */
+    color: rgba(255, 255, 255, 0.95);
+    line-height: 1.8 !important; /* مسافة كافية للنقط والهمزات */
+    text-align: right;
+    direction: rtl;
+    word-wrap: break-word; /* كسر السطر عند الكلمات كاملة */
+    overflow-wrap: break-word;
+    display: block;
+    min-height: 1.8em;
+}
 .dlg-cur{display:inline-block;width:2px;height:1em;background:var(--rose);vertical-align:middle;animation:blink .7s step-end infinite;margin-right:2px}
 @keyframes blink{50%{opacity:0}}
 /* progress bar بدل الزرار */
