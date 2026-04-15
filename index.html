@@ -649,23 +649,19 @@ function showDlg(idx) {
 /* كليك على الـ dialog يسرّع للرسالة التالية فوراً */
 document.getElementById('dlg').addEventListener('click', function() {
   if (dlgTyping) {
-    // إكمال الكتابة فوراً في حال الضغط أثناء الكتابة
     const d = SCRIPT[dlgIdx];
     const el = document.getElementById('dlg-txt');
-    const c = el.querySelector('.dlg-cur');
-    if (c) c.remove();
     el.textContent = d.txt;
     dlgTyping = false;
-    
     if (dlgAutoTimer) clearTimeout(dlgAutoTimer);
     dlgAutoTimer = setTimeout(() => { dlgIdx++; showDlg(dlgIdx); }, AUTO_READ_DELAY);
   } else {
-    // اضغط لتخطي الـ 3 ثواني والانتقال فوراً
     if (dlgAutoTimer) { clearTimeout(dlgAutoTimer); dlgAutoTimer = null; }
     dlgIdx++;
     showDlg(dlgIdx);
   }
 });
+
 function launchConfetti(){const pal=['#D4507A','#B8935A','#E8829F','#F2BAC9','#9B2B52','#E8C17A','#fff','#7C3AED','#A78BFA'];for(let i=0;i<130;i++){const p=document.createElement('div');p.className='cf';const sz=4+Math.random()*9;p.style.cssText=`left:${Math.random()*100}vw;width:${sz}px;height:${sz}px;background:${pal[~~(Math.random()*pal.length)]};border-radius:${Math.random()>.5?'50%':'1px'};animation-duration:${2.5+Math.random()*3}s;animation-delay:${Math.random()*1.5}s`;document.body.appendChild(p);p.addEventListener('animationend',()=>p.remove())}}
 
 const grid=document.getElementById('pgrid');
