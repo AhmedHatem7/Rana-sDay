@@ -40,6 +40,7 @@ body {
     }
     .dlg-txt {
         letter-spacing: 0; /* الحروف العربية لا تحب الـ spacing */
+        white-space: normal; /* السماح بكسر السطر على الموبايل */
     }
 }
 .age-top{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,2vw,15px);color:rgba(255,255,255,.3);letter-spacing:5px;margin-bottom:16px;text-align:center;z-index:1}
@@ -96,16 +97,19 @@ body {
 .dlg-role{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;letter-spacing:2px;color:rgba(255,255,255,.28)}
 .dlg-txt {
     font-family: 'Cairo', sans-serif !important;
-    font-size: clamp(15px, 2.8vw, 18px);
+    font-size: clamp(15px, 2.8vw, 18px); /* تكبير الخط قليلاً للموبايل */
     color: rgba(255, 255, 255, 0.95);
-    line-height: 2;
+    line-height: 1.8 !important; /* مسافة كافية للنقط والهمزات */
     text-align: right;
     direction: rtl;
-    word-wrap: break-word;
+    word-wrap: break-word; /* كسر السطر عند الكلمات كاملة */
     overflow-wrap: break-word;
     display: block;
     min-height: 1.8em;
-    white-space: normal;
+    display: flex; /* تحويل الحاوية لـ flex */
+    flex-direction: row-reverse; /* لضمان الترتيب الصحيح من اليمين للشمال */
+    justify-content: flex-start;
+    white-space: nowrap; 
     font-variant-ligatures: common-ligatures;
     text-rendering: optimizeLegibility;
 }
@@ -615,29 +619,25 @@ function showDlg(idx) {
   }
   
   const d = SCRIPT[idx];
+  const el = document.getElementById('dlg-txt'); // ← هنا الأول
   document.getElementById('dlg').classList.add('show');
   dlgTyping = true;
   if (dlgAutoTimer) { clearTimeout(dlgAutoTimer); dlgAutoTimer = null; }
 
-  document.getElementById('dlg-txt').innerHTML = '<span class="dlg-cur"></span>';
-  const cursor = document.getElementById('dlg-txt').querySelector('.dlg-cur');
+  el.innerHTML = ''; // ← دلوقتي el متعرف
   const nameLabel = d.sp === 'boy' ? 'Ahmed' : 'Rana';
   document.getElementById('dlg-who').innerHTML = avatarHTML(d.sp) + `<div class="dlg-role">${nameLabel}</div>`;
 
   let i = 0;
-  const charDelay = 60; // تم زيادة الرقم لتبطيء سرعة الكتابة (كان 28)
-  const totalTypingMs = d.txt.length * charDelay + 200;
+  const charDelay = 60;
 
   function tp() {
     if (i < d.txt.length) {
-      document.getElementById('dlg-txt').insertBefore(document.createTextNode(d.txt[i]), cursor);
+      el.appendChild(document.createTextNode(d.txt[i]));
       i++;
       setTimeout(tp, charDelay);
     } else {
-      if (cursor) cursor.remove();
-      dlgTyping = false;
-      
-      // بمجرد انتهاء الكتابة، ننتظر 3 ثواني ثم ننتقل للرسالة التالية
+      dlgTyping = false; // ← مفيش cursor.remove() 
       dlgAutoTimer = setTimeout(() => {
         dlgIdx++;
         showDlg(dlgIdx);
@@ -646,7 +646,6 @@ function showDlg(idx) {
   }
   setTimeout(tp, 150);
 }
-
 /* كليك على الـ dialog يسرّع للرسالة التالية فوراً */
 document.getElementById('dlg').addEventListener('click', function() {
   if (dlgTyping) {
