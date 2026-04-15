@@ -619,8 +619,8 @@ function showDlg(idx) {
   dlgTyping = true;
   if (dlgAutoTimer) { clearTimeout(dlgAutoTimer); dlgAutoTimer = null; }
 
-  document.getElementById('dlg-txt').innerHTML = '<span class="dlg-cur"></span>';
-  const cursor = document.getElementById('dlg-txt').querySelector('.dlg-cur');
+const el = document.getElementById('dlg-txt');
+el.innerHTML = '';
   const nameLabel = d.sp === 'boy' ? 'Ahmed' : 'Rana';
   document.getElementById('dlg-who').innerHTML = avatarHTML(d.sp) + `<div class="dlg-role">${nameLabel}</div>`;
 
@@ -628,23 +628,19 @@ function showDlg(idx) {
   const charDelay = 60; // تم زيادة الرقم لتبطيء سرعة الكتابة (كان 28)
   const totalTypingMs = d.txt.length * charDelay + 200;
 
-  function tp() {
+ function tp() {
     if (i < d.txt.length) {
-      document.getElementById('dlg-txt').insertBefore(document.createTextNode(d.txt[i]), cursor);
-      i++;
-      setTimeout(tp, charDelay);
+        const textNode = document.createTextNode(d.txt[i]);
+        el.appendChild(textNode); // بدل insertBefore
+        i++;
+        setTimeout(tp, charDelay);
     } else {
-      if (cursor) cursor.remove();
-      dlgTyping = false;
-      
-      // بمجرد انتهاء الكتابة، ننتظر 3 ثواني ثم ننتقل للرسالة التالية
-      dlgAutoTimer = setTimeout(() => {
-        dlgIdx++;
-        showDlg(dlgIdx);
-      }, AUTO_READ_DELAY);
+        dlgTyping = false;
+        dlgAutoTimer = setTimeout(() => {
+            dlgIdx++;
+            showDlg(dlgIdx);
+        }, AUTO_READ_DELAY);
     }
-  }
-  setTimeout(tp, 150);
 }
 
 /* كليك على الـ dialog يسرّع للرسالة التالية فوراً */
