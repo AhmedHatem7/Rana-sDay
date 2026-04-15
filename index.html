@@ -203,7 +203,7 @@ section{position:relative;z-index:1;padding:80px 0}
 .lbtn{display:block;margin:0 auto 24px;background:transparent;color:var(--rose-dk);border:1px solid rgba(212,80,122,.32);padding:10px 30px;cursor:pointer;font-family:'Cairo',sans-serif;font-size:13px;transition:all .25s;letter-spacing:1px}
 .lbtn:hover{background:rgba(212,80,122,.07)}
 .lbtn.gone{display:none}
-#lbody{font-family:'Cairo',sans-serif;font-size:clamp(13px,1.8vw,15px);line-height:2.6;color:var(--ink2);text-align:justify;direction:rtl;min-height:36px}
+#lbody{font-family:'Cairo',sans-serif;font-size:clamp(13px,1.8vw,15px);line-height:2.6;color:var(--ink2);text-align:justify;direction:rtl;min-height:36px;white-space:pre-wrap;word-break:break-word;}
 .lcur{display:inline-block;width:2px;height:1.1em;background:var(--rose-dk);vertical-align:middle;animation:blink .75s step-end infinite;margin-right:2px}
 .lsig{margin-top:28px;padding-top:16px;border-top:1px solid rgba(212,80,122,.12);text-align:left;direction:ltr}
 .lsig span{font-family:'Dancing Script',cursive;font-size:20px;color:var(--rose-dk)}
@@ -629,17 +629,16 @@ function showDlg(idx) {
   document.getElementById('dlg-who').innerHTML = avatarHTML(d.sp) + `<div class="dlg-role">${nameLabel}</div>`;
 
   let i = 0;
-  const charDelay = 60;
-  const words = d.txt.split(' ');
-  let wordIndex = 0;
+  const charDelay = 34;
+  el.textContent = '';
 
   function tp() {
-    if (wordIndex < words.length) {
-      el.appendChild(document.createTextNode(words[wordIndex] + (wordIndex < words.length - 1 ? ' ' : '')));
-      wordIndex++;
-      setTimeout(tp, 200); // زيادة التأخير للكلمات الكاملة
+    if (i < d.txt.length) {
+      el.textContent = d.txt.slice(0, i + 1);
+      i++;
+      setTimeout(tp, charDelay);
     } else {
-      dlgTyping = false; // ← مفيش cursor.remove() 
+      dlgTyping = false;
       dlgAutoTimer = setTimeout(() => {
         dlgIdx++;
         showDlg(dlgIdx);
@@ -682,7 +681,7 @@ function moonSVG(p,sz){const r=sz/2,cx=r,cy=r;let d='';if(p<=0||p>=1){d=`<circle
 const mg=document.getElementById('mgrid');MOON.forEach(m=>{const c=document.createElement('div');c.className='mcard';const sz=Math.min(64,innerWidth<480?50:64);c.innerHTML=`${moonSVG(m.p,sz)}<div class="mlbl">${m.l}</div><div class="myr">${m.y}</div>`;c.addEventListener('click',()=>{document.querySelectorAll('.mcard').forEach(x=>x.classList.remove('active'));c.classList.add('active');document.getElementById('mstory').innerHTML=`<div class="mslbl">${m.l} — ${m.y}</div><div class="mstxt">${m.t}</div>`});mg.appendChild(c)});
 
 let ltrR=false;
-function startLetter(){if(ltrR)return;ltrR=true;document.getElementById('lbtn').classList.add('gone');const b=document.getElementById('lbody');b.innerHTML='<span class="lcur"></span>';const cur=b.querySelector('.lcur');const parts=LETTER.split(/(\s+)/);let partIndex=0;function tp(){if(partIndex<parts.length){const part=parts[partIndex];if(part==='\n'){b.insertBefore(document.createElement('br'),cur);if(parts[partIndex+1]==='\n'){b.insertBefore(document.createElement('br'),cur);partIndex++}}else{b.insertBefore(document.createTextNode(part),cur)}partIndex++;setTimeout(tp,100)}else{cur.remove()}}tp()}
+function startLetter(){if(ltrR)return;ltrR=true;document.getElementById('lbtn').classList.add('gone');const b=document.getElementById('lbody');b.innerHTML='';const textNode=document.createTextNode('');b.appendChild(textNode);const cur=document.createElement('span');cur.className='lcur';b.appendChild(cur);let i=0;const charDelay=34;function tp(){if(i<LETTER.length){textNode.nodeValue=LETTER.slice(0,i+1);i++;setTimeout(tp,charDelay)}else{cur.remove()}}tp()}
 
 /* ===== Music Player ===== */
 let currentSong=-1,audioEl=null,isPlaying=false;
@@ -721,8 +720,8 @@ function closeMiniPlayer(){document.getElementById('mini-player').classList.remo
 let bgAudio=null,bgPlaying=false;
 const bgSong=SONGS.find(s=>s.bg)||SONGS[0];
 function showBgPlayer(){if(!bgSong)return;document.getElementById('bp-title').textContent=bgSong.title;document.getElementById('bp-artist').textContent=bgSong.artist;document.getElementById('bgplayer').classList.remove('hidden');if(bgSong.url&&bgSong.url!=='#')startBgAudio(bgSong.url)}
-function startBgAudio(url){if(bgAudio){bgAudio.pause();bgAudio=null}bgAudio=new Audio(url);bgAudio.loop=true;bgAudio.volume=0;bgAudio.muted=true;bgAudio.play().then(()=>{bgPlaying=true;document.getElementById('bp-disc').textContent='❚❚';document.getElementById('bp-disc').classList.add('spin');let vol=0;const fadeIn=()=>{vol+=0.05;if(vol>=0.35){bgAudio.volume=0.35;bgAudio.muted=false}else{bgAudio.volume=vol;setTimeout(fadeIn,100)}};fadeIn()}).catch(()=>{bgPlaying=false})}
-function toggleBgPlay(){if(!bgAudio){if(bgSong.url&&bgSong.url!=='#')startBgAudio(bgSong.url);return}if(bgPlaying){bgAudio.pause();bgPlaying=false;document.getElementById('bp-disc').textContent='▶';document.getElementById('bp-disc').classList.remove('spin')}else{bgAudio.play();bgPlaying=true;document.getElementById('bp-disc').textContent='❚❚';document.getElementById('bp-disc').classList.add('spin')}}
+function startBgAudio(url){if(bgAudio){bgAudio.pause();bgAudio=null}bgAudio=new Audio(url);bgAudio.loop=true;bgAudio.preload='auto';bgAudio.volume=0.35;bgAudio.muted=false;const playPromise=bgAudio.play();if(playPromise!==undefined){playPromise.then(()=>{bgPlaying=true;document.getElementById('bp-disc').textContent='❚❚';document.getElementById('bp-disc').classList.add('spin')}).catch(()=>{bgPlaying=false})}}
+function toggleBgPlay(){if(!bgAudio){if(bgSong.url&&bgSong.url!=='#')startBgAudio(bgSong.url);return}if(bgPlaying){bgAudio.pause();bgPlaying=false;document.getElementById('bp-disc').textContent='▶';document.getElementById('bp-disc').classList.remove('spin')}else{bgAudio.play().then(()=>{bgPlaying=true;document.getElementById('bp-disc').textContent='❚❚';document.getElementById('bp-disc').classList.add('spin')}).catch(()=>{});}}
 function hideBgPlayer(){document.getElementById('bgplayer').classList.add('hidden');if(bgAudio){bgAudio.pause();bgPlaying=false}}
 
 function initReveal(){const ob=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){e.target.classList.add('vis');ob.unobserve(e.target)}})},{threshold:.1});document.querySelectorAll('.rv').forEach(el=>ob.observe(el))}
