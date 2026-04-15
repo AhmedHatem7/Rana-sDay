@@ -630,12 +630,14 @@ function showDlg(idx) {
 
   let i = 0;
   const charDelay = 60;
+  const words = d.txt.split(' ');
+  let wordIndex = 0;
 
   function tp() {
-    if (i < d.txt.length) {
-      el.appendChild(document.createTextNode(d.txt[i]));
-      i++;
-      setTimeout(tp, charDelay);
+    if (wordIndex < words.length) {
+      el.appendChild(document.createTextNode(words[wordIndex] + (wordIndex < words.length - 1 ? ' ' : '')));
+      wordIndex++;
+      setTimeout(tp, 200); // زيادة التأخير للكلمات الكاملة
     } else {
       dlgTyping = false; // ← مفيش cursor.remove() 
       dlgAutoTimer = setTimeout(() => {
